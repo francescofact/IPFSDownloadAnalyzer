@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>IPFSDownloadAnalyzer</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">IPFSDownloadAnalyzer</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+        <div class="col-lg-3"></div>
+      <div class="col-lg-6 text-center justify-content-center">
+        <h2 class="mt-5">Daemon Status:</h2>
+        <p id="daemonstatus" >Retrieving...</p>
+        <h2 class="mt-5">Peers: <span id="peers">0</span></h2>
+        <br><hr><br>
+        <h2>Download</h2>
+        <div id="downloadform">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">CID</span>
+                </div>
+                <input type="text" id="cid" class="form-control" placeholder="Insert the file CID" aria-label="Insert the file CID" aria-describedby="basic-addon1">
+            </div>
+            <b>WARNING! </b><br>
+            The local cache will be cleared in order to analyze the full download<br><br>
+            <button class="btn btn-primary" id="download">Download!</button>
+        </div>
+        <div id="downloadprogress" style="display:none">
+            <b>CID:</b>  <span id="cid_label">Retrieving...</span><br>
+            <b>Download Size:</b> <span id="size_label">Retrieving...</span><br>
+            <b>Downloaded:</b> <span id="downloaded_label">Retrieving...</span><br>
+            <br>
+            <b><span id="progress_label">0</span>%</b>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            * This progress bar and the downloaded data is an estimation.<br>No API are given to check the exact status
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='app.js') }}" ></script>
+
+</body>
+
+</html>
