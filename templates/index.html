@@ -12,6 +12,7 @@
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 
 </head>
 
@@ -58,15 +59,28 @@
               <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             * This progress bar and the downloaded data is an estimation.<br>No API are given to check the exact status
+            <br>
+            Peers that helped:
+            <table id="peerstable" class="table table-bordered table-striped table-hover" style="width:100%">
+                <thead>
+                    <th>Country</th>
+                    <th>Peer ID</th>
+                    <th>Peer IP</th>
+                    <th>Downloaded</th>
+                </thead>
+            </table>
         </div>
 
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap core JavaScript -->
+  <!-- Bootstrap, Jquery and extensions -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.10.24/sorting/file-size.js"></script>
   <script src="{{ url_for('static', filename='app.js') }}" ></script>
 
 </body>

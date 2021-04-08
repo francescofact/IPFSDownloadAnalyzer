@@ -1,5 +1,7 @@
 from flask import Flask, render_template
+
 import ipfsAPI
+import myUtils
 
 app = Flask(__name__)
 app.config["BASE_URL"] = "http://127.0.0.1:5001/api/v0/"
@@ -10,12 +12,22 @@ def index():
 
 @app.route('/api/download/<cid>')
 def start_download(cid):
-    return {"status": ipfsAPI.download_file("QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm", "/home/francesco/ipfs/winrar"),
+    return {"status": ipfsAPI.download_file(cid, "/home/francesco/ipfs/winrar"),
             "size": ipfsAPI.get_file_size(cid)}
 
-@app.route('/api/download_est')
-def download_est():
-    return {"estimation": ipfsAPI.download_estimation()}
+@app.route('/api/peers')
+def peers():
+    """
+    Return list of peers that are connected and helped in the download
+    """
+    peers = ipfsAPI.get_peers()
+    peers_plus = {}
+    for peer in peers:
+        ledger = ipfsAPI.consult_ledger(peer[0])
+        if ledger != [0, 0]:
+            peers_plus[peer[0]] = [peer[1], myUtils.get_ip_nation(peer[1]), ledger]
+    downloading = ipfsAPI.is_downloading()
+    return {"peers": peers_plus, "status": downloading["status"]}
 
 @app.route('/api/status')
 def status():

@@ -46,7 +46,7 @@ def get_file_size(cid):
 def is_downloading():
     """
     Check if there is a get running
-    :return: True || False
+    :return: dict
     """
     cmds = myUtils.post("diag/cmds")
     for cmd in cmds:
@@ -101,9 +101,11 @@ def download_file(cid, output=""):
     """
     # Let's reboot the daemon to clear stats and pending
     kill_subprocess()
+    print("Subprocess killed")
+    time.sleep(1)
     reset_ipfs()
     print("IPFS Daemon (re)started")
-    time.sleep(5)
+    time.sleep(4)
 
     # Clear Cache
     myUtils.post("repo/gc", False)
