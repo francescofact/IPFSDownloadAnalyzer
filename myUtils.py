@@ -1,6 +1,7 @@
 import requests
 from flask import current_app
 from geoip import geolite2
+import time
 
 
 def post(url, json=True):
@@ -10,8 +11,15 @@ def post(url, json=True):
     :param data:
     :return: JSON response || None
     """
-    r = requests.post(current_app.config["BASE_URL"] + url)
-    if json == True:
+    r = None
+    try:
+        r = requests.post(current_app.config["BASE_URL"] + url)
+    except:
+        time.sleep(10)
+        print("Retrying failed POST")
+        r = requests.post(current_app.config["BASE_URL"] + url)
+
+    if json:
         return r.json()
     return r.text
 

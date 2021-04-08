@@ -108,7 +108,7 @@ def download_file(cid, output=""):
     time.sleep(4)
 
     # Clear Cache
-    myUtils.post("repo/gc", False)
+    myUtils.post("repo/gc", json=False)
     print("Cache clear!")
     time.sleep(2)
     # Start download
