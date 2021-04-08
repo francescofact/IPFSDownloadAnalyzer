@@ -41,7 +41,18 @@ function watchdog(){
                     let peer = peers[key]
                     //datatables update
                     if (key in cache){
+                        let skip = false;
+                        table.rows().every( function (index) {
+                            if (!skip){
+                               let row = this.data();
+                                if (row[1] === key){
+                                   row[3] = bytesToSize(peer[2][1]);
+                                   table.row(index).data(row).draw(false);
+                                   skip = true;
+                                }
+                            }
 
+                        });
                     } else {
                         table.row.add([
                             "<img src='https://www.countryflags.io/" + peer[1] + "/flat/24.png'/>",
