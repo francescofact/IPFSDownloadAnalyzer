@@ -58,12 +58,16 @@ function watchdog(){
 
                         });
                     } else {
-                        table.row.add([
+                        let newrow = [
                             "<img src='https://www.countryflags.io/" + peer[1] + "/flat/24.png'/>",
                             key, //Peer ID
                             peer[0],  //Peer IP
                             bytesToSize(peer[2][1]) //Downloaded from Peer
-                        ]).draw(false);
+                        ]
+                        if (peer[1] === "WORLD") //remove flag img if unknown
+                            newrow[0] = "";
+
+                        table.row.add(newrow).draw(false);
                     }
                     //cache update
                     cache[key] = peer;
