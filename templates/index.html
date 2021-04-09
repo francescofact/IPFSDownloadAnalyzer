@@ -1,88 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IPFSDownloadAnalyzer</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <style>
+        .footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 60px;
+          line-height: 60px;
+        }
 
-  <title>IPFSDownloadAnalyzer</title>
+        html{
+            background-color: #f8f9fc;
+        }
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-
+    </style>
+    <!-- Custom styles for this template-->
+    <link href="{{ url_for('static', filename='sb-admin-2.min.css') }}" rel="stylesheet">
 </head>
 
-<body>
+<body id="page-top">
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">IPFSDownloadAnalyzer</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </nav>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-  <!-- Page Content -->
-  <div class="container">
-    <div class="row">
-        <div class="col-lg-3"></div>
-      <div class="col-lg-6 text-center justify-content-center">
-        <h2 class="mt-5">Daemon Status:</h2>
-        <p id="daemonstatus" >Retrieving...</p>
-        <h2 class="mt-5">Peers: <span id="peers">0</span></h2>
-        <br><hr><br>
-        <h2>Download</h2>
-        <div id="downloadform">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">CID</span>
+            <!-- Main Content -->
+            <div id="content">
+                <!-- nav -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <h1>IPFSDownloadAnalyzer</h1>
+                </nav>
+                <!-- Begin Page Content -->
+                <div id="downloadform" class="container-fluid text-center">
+                    <div class="row justify-content-center">
+                      <div class="col-4">
+                        <img src="https://ipfs.io/ipfs/QmTgtbb4LckHaXh1YhpNcBu48cFY8zgT1Lh49q7q7ksf3M/vector/ipfs-logo-vector-ice.svg" width="128"/>
+                        <br><br>
+                        <h3>Welcome to IPFSDownloadAnalyzer!</h3>
+                        <h5>This tool can monitor a IPFS download and give some interesting stats in realtime</h5>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">CID</span>
+                            </div>
+                            <input type="text" id="cid" class="form-control" placeholder="Insert the file CID" aria-label="Insert the file CID" aria-describedby="basic-addon1">
+                        </div>
+                        <b>WARNING! </b><br>
+                        The local cache will be cleared in order to analyze the full download<br><br>
+                        <button class="btn btn-primary" id="download">Download!</button>
+                      </div>
+                    </div>
                 </div>
-                <input type="text" id="cid" class="form-control" placeholder="Insert the file CID" aria-label="Insert the file CID" aria-describedby="basic-addon1">
-            </div>
-            <b>WARNING! </b><br>
-            The local cache will be cleared in order to analyze the full download<br><br>
-            <button class="btn btn-primary" id="download">Download!</button>
-        </div>
-        <div id="downloadprogress" style="display:none">
-            <b>CID:</b>  <span id="cid_label">Retrieving...</span><br>
-            <b>Download Size:</b> <span id="size_label">Retrieving...</span><br>
-            <b>Downloaded:</b> <span id="downloaded_label">Retrieving...</span><br>
-            <br>
-            <b><span id="progress_label">0</span>%</b>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            * This progress bar and the downloaded data is an estimation.<br>No API are given to check the exact status
-            <br>
-            Peers that helped:
-            <table id="peerstable" class="table table-bordered table-striped table-hover" style="width:100%">
-                <thead>
-                    <th>Country</th>
-                    <th>Peer ID</th>
-                    <th>Peer IP</th>
-                    <th>Downloaded</th>
-                </thead>
-            </table>
-        </div>
+                <div id="downloadpage" class="container-fluid" style="display:none">
 
-      </div>
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Connected Peers -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Connected Peers</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Size -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Download size</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 size_label"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Progress -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Download (<span class="downloaded_label">0 bytes</span>)
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="progress_label">0%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div id="progressbar" class="progress-bar bg-info" role="progressbar"
+                                                            style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Average Download Speed -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Average Download Speed</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0 b/s</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 d-flex align-items-stretch" >
+
+                            <!-- Download Details -->
+                            <div class="card shadow mb-4" style="width:100%!important">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Download Details</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>
+                                        <b>Status:</b> <span id="daemonstatus"></span><br>
+                                        <b>CID:</b> <span id="cid_label"></span><br>
+                                        <b>Total Size:</b> <span class="size_label"></span><br>
+                                        <b>Downloaded:</b> <span class="downloaded_label">0 bytes</span>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie Chart -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Peer help</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Dropdown Header:</div>
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <!-- Peer Datatable -->
+                        <div class="col-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Peers that helped</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Dropdown Header:</div>
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="peerstable" class="table table-bordered table-striped table-hover" width="100%" cellspacing="0">
+                                            <thead>
+                                                <th>Country</th>
+                                                <th>Peer ID</th>
+                                                <th>Peer IP</th>
+                                                <th>Downloaded</th>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Content Column -->
+                        <div class="col-lg-6 mb-4">
+
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>The file is almost in 5 countries.</p>
+                                    <div id="mapdiv" style="width: 100%; height: 450px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Francesco Fattori (Matr. 626200)</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
     </div>
-  </div>
+    <!-- End of Page Wrapper -->
 
-  <!-- Bootstrap, Jquery and extensions -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-  <script src="https://cdn.datatables.net/plug-ins/1.10.24/sorting/file-size.js"></script>
-  <script src="{{ url_for('static', filename='app.js') }}" ></script>
 
+    <!-- Custom scripts for all pages-->
+    <script src="{{ url_for('static', filename='sb-admin-2.min.js') }}"></script>
+
+    <!-- Page level plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.24/sorting/file-size.js"></script>
+
+    <!-- Map -->
+    <script src="https://www.amcharts.com/lib/3/ammap.js" type="text/javascript"></script>
+    <script src="https://www.amcharts.com/lib/3/maps/js/worldHigh.js" type="text/javascript"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js" type="text/javascript"></script>
+
+
+    <script src="{{ url_for('static', filename='app.js') }}" type="text/javascript"></script>
+
+    <script>
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {},
+          options: {
+            maintainAspectRatio: false,
+            legend: {
+              display: false
+            }
+          },
+        });
+
+
+        //map
+        var map = AmCharts.makeChart("mapdiv",{
+            type: "map",
+            theme: "light",
+            projection: "mercator",
+            dragMap: false,
+            zoomControl: {
+                zoomControlEnabled: false,
+                homeButtonEnabled: false
+            },
+            dataProvider : {
+                map : "worldHigh",
+                getAreasFromMap : true,
+                areas : []
+            },
+            areasSettings : {
+                color : "#B4B4B7",
+                colorSolid : "#B4B4B7",
+                selectedColor : "#84ADE9",
+                outlineColor : "#666666",
+                rollOverColor : "#B4B4B7",
+                rollOverOutlineColor : "#000000"
+            }
+        });
+
+        //random color
+        function getRandomColor() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+    </script>
 </body>
 
 </html>

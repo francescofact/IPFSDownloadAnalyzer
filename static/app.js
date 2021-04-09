@@ -10,7 +10,9 @@ let table = $("#peerstable").DataTable({
     columnDefs: [
        { type: 'file-size', targets: 3 }
      ],
-    "order": [[ 3, "desc" ]]
+    "order": [[ 3, "desc" ]],
+    "searching": false,
+    "bLengthChange": false,
 });
 
 function daemonStatus(){
@@ -69,9 +71,9 @@ function watchdog(){
 
                 //calc downloaded and update UI
                 let downloaded = calc_downloaded();
-                $("#downloaded_label").html(bytesToSize(downloaded));
+                $(".downloaded_label").html(bytesToSize(downloaded));
                 let percent = (100 * downloaded) / download_size;
-                $("#progress_label").html(percent.toFixed(2));
+                $("#progress_label").html(percent.toFixed(2) + "%");
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);
 
             }
@@ -112,10 +114,10 @@ $("#download").click(function(){
             if (status === "success"){
                 if (data["status"] === "started"){
                     $("#downloadform").hide();
-                    $("#downloadprogress").fadeIn();
+                    $("#downloadpage").fadeIn();
                     download_size = data["size"];
                     $("#cid_label").html(cid);
-                    $("#size_label").html(bytesToSize(download_size));
+                    $(".size_label").html(bytesToSize(download_size));
                     watchdog();
                 } else {
                     alert("Error starting the download. Please restart the application")
@@ -133,6 +135,7 @@ $("#download").click(function(){
 function resume(){
     //for debug
     $("#downloadform").hide();
-    $("#downloadprogress").show();
+    $("#downloadpage").show();
+    $(".size_label").html(bytesToSize(download_size));
     watchdog();
 }
