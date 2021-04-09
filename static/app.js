@@ -30,6 +30,8 @@ function watchdog(){
                 endTime = new Date();
                 loop = false;
                 $('.progress').fadeOut();
+                progresschart.series[0].color = "#20c997";
+                progresschart.series[0].addPoint(endTime, 100);
                 $("#progress_label").html("Completed");
             } else {
                 let peers = data["peers"];
