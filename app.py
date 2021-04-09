@@ -27,7 +27,7 @@ def peers():
         if ledger != [0, 0]:
             peers_plus[peer[0]] = [peer[1], myUtils.get_ip_nation(peer[1]), ledger]
     downloading = ipfsAPI.is_downloading()
-    return {"peers": peers_plus, "status": downloading["status"]}
+    return {"connected": len(peers), "peers": peers_plus, "status": downloading["status"]}
 
 @app.route('/api/status')
 def status():

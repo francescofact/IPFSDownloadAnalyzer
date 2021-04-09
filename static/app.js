@@ -4,8 +4,10 @@ let cache = {};
 let loop = true;
 let countries = [];
 
+let startTime = false;
+let endTime = false;
+
 //initialize stuff
-//window.setInterval(daemonStatus(), 5000);
 let table = $("#peerstable").DataTable({
     columnDefs: [
        { type: 'file-size', targets: 3 }
@@ -15,17 +17,6 @@ let table = $("#peerstable").DataTable({
     "bLengthChange": false,
 });
 
-function daemonStatus(){
-    $.get("/api/status", function(data, status){
-        if (status === "success"){
-            if (data["status"] === "active"){
-                $("#daemonstatus").html("Downloading " + data["file"])
-            } else {
-                $("#daemonstatus").html("idle")
-            }
-        }
-    });
-}
 
 //function to update download status and cache peer help
 function watchdog(){
@@ -36,6 +27,7 @@ function watchdog(){
         success: function(data) {
             if (data["status"] === "idle") {
                 alert("Download Completed!");
+                endTime = new Date();
                 loop = false;
                 $('#progressbar').css('width', '100%').attr('aria-valuenow', 100);
             } else {
@@ -73,13 +65,20 @@ function watchdog(){
                     cache[key] = peer;
                 });
 
-                //calc downloaded and update UI
-                let downloaded = update_download_and_worldmap();
+                //calc downloaded
+                let downloaded = get_downloaded_and_update_worldmap();
+                //update UI
                 $(".downloaded_label").html(bytesToSize(downloaded));
+                $("#connected").html(data["connected"]);
                 let percent = (100 * downloaded) / download_size;
                 $("#progress_label").html(percent.toFixed(2) + "%");
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);
 
+                //calc average download speed
+                console.log([downloaded, Math.floor((new Date() - startTime)/ 1000 )])
+                let speed = ( downloaded / Math.floor((new Date() - startTime)/ 1000 ) );
+                if (isNaN(speed)) speed=0;
+                $("#speed").html(bytesToSize(speed)+"/s");
             }
         },
         complete: function() {
@@ -89,8 +88,8 @@ function watchdog(){
     });
 }
 
-//get downloaded part summing peers in cache and wordmap
-function update_download_and_worldmap(){
+//compute and update gui
+function get_downloaded_and_update_worldmap(){
     let downloaded = 0;
     Object.keys(cache).forEach(function(key) {
         //downloaded size
@@ -133,6 +132,7 @@ $("#download").click(function(){
                 if (data["status"] === "started"){
                     $("#downloadform").hide();
                     $("#downloadpage").fadeIn();
+                    startTime = new Date();
                     download_size = data["size"];
                     $("#cid_label").html(cid);
                     $(".size_label").html(bytesToSize(download_size));
