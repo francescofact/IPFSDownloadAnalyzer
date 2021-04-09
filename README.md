@@ -1,6 +1,6 @@
 # IPFSDownloadAnalyzer
 
-<p align="center"><img src="static/ipfs_logo.svg" alt="IPFS Logo" width="150"/></p>
+<p align="center"><img src="static/ipfs_logo.png" alt="IPFS Logo" width="150"/></p>
 
 ### Description
 This project was coded for the first midterm of the course "Peer-to-peer and Blockchains" @ UniPi.
