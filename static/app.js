@@ -75,9 +75,11 @@ function watchdog(){
                 percent = Math.min(percent, 99.99) // avoid going to 100% until download finished
                 $("#progress_label").html(percent.toFixed(2) + "%");
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);
-
+                //update percent chart
+                let duration = new Date() - startTime;
+                progresschart.series[0].addPoint([duration,percent]);
                 //calc average download speed
-                let speed = ( downloaded / Math.floor((new Date() - startTime)/ 1000 ) );
+                let speed = ( downloaded / Math.floor(duration / 1000 ) );
                 if (isNaN(speed)) speed=0;
                 $("#speed").html(bytesToSize(speed)+"/s");
             }

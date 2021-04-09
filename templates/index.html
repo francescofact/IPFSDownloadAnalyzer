@@ -41,7 +41,7 @@
                 <div id="downloadform" class="container-fluid text-center">
                     <div class="row justify-content-center">
                       <div class="col-4">
-                        <img src="https://ipfs.io/ipfs/QmTgtbb4LckHaXh1YhpNcBu48cFY8zgT1Lh49q7q7ksf3M/vector/ipfs-logo-vector-ice.svg" width="128"/>
+                        <img src="{{ url_for('static', filename='ipfs_logo.svg') }}" width="128"/>
                         <br><br>
                         <h3>Welcome to IPFSDownloadAnalyzer!</h3>
                         <h5>This tool can monitor a IPFS download and give some interesting stats in realtime</h5>
@@ -257,6 +257,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Content Column -->
+                        <div class="col-lg-6 mb-4">
+
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Download Progression</h6>
+                                </div>
+                                <div class="card-body">
+                                    <figure class="highcharts-figure">
+                                        <div id="downloadchart"></div>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -290,6 +306,8 @@
 
     <!-- Page level plugins -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
 
     <!-- Datatables -->
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
@@ -344,6 +362,60 @@
                 rollOverColor : "#B4B4B7",
                 rollOverOutlineColor : "#000000"
             }
+        });
+
+        //download chart
+        let progresschart = Highcharts.chart('downloadchart', {
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text:""
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                type: 'datetime',
+                labels: {
+                    overflow: 'justify'
+                },
+                dateTimeLabelFormats: {
+                  minute: '%H:%M:%S',
+                  day: '%H:%M:%S',
+                }
+            },
+            yAxis: {
+                max: 100,
+                labels: {
+                    formatter: function () {
+                        return this.value + "%";
+                    }
+                }
+            },
+            tooltip: {
+                pointFormat: 'The download was at <b>{point.y} %</b> after {point.x:%H:%M:%S}'
+            },
+            plotOptions: {
+                area: {
+                    marker: {
+                        enabled: false,
+                        symbol: 'circle',
+                        radius: 2,
+                        states: {
+                            hover: {
+                                enabled: true
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                showInLegend: false,
+                data: [
+
+                ]
+            }]
         });
 
         //random color
