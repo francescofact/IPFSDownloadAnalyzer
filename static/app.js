@@ -29,7 +29,8 @@ function watchdog(){
                 alert("Download Completed!");
                 endTime = new Date();
                 loop = false;
-                $('#progressbar').css('width', '100%').attr('aria-valuenow', 100);
+                $('.progress').fadeOut();
+                $("#progress_label").html("Completed");
             } else {
                 let peers = data["peers"];
                 //update cache and datatable
@@ -71,11 +72,11 @@ function watchdog(){
                 $(".downloaded_label").html(bytesToSize(downloaded));
                 $("#connected").html(data["connected"]);
                 let percent = (100 * downloaded) / download_size;
+                percent = Math.min(percent, 99.99) // avoid going to 100% until download finished
                 $("#progress_label").html(percent.toFixed(2) + "%");
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);
 
                 //calc average download speed
-                console.log([downloaded, Math.floor((new Date() - startTime)/ 1000 )])
                 let speed = ( downloaded / Math.floor((new Date() - startTime)/ 1000 ) );
                 if (isNaN(speed)) speed=0;
                 $("#speed").html(bytesToSize(speed)+"/s");
@@ -121,7 +122,7 @@ function bytesToSize(bytes) {
 
 //start download
 $("#download").click(function(){
-    $("#download").prop("disabled", true)
+    disableDownloadButton(true);
     cache = {};
     let cid = $("#cid").val().trim();
     if (cid === ""){
@@ -138,16 +139,26 @@ $("#download").click(function(){
                     $(".size_label").html(bytesToSize(download_size));
                     watchdog();
                 } else {
-                    alert("Error starting the download. Please restart the application")
-                    $("#download").prop("disabled", false)
+                    alert("Error starting the download. Please restart the application");
+                    disableDownloadButton(false);
                 }
             } else {
-                alert("Error starting the download. Please restart the application")
-                $("#download").prop("disabled", false)
+                alert("Error starting the download. Please restart the application");
+                disableDownloadButton(false);
             }
         });
     }
 });
+
+function disableDownloadButton(toggle){
+    if (toggle){
+        //disable
+        $("#download").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Warming up IPFS...');
+    } else {
+        //enable
+        $("#download").prop("disabled", false).html("Download");
+    }
+}
 
 //resume download in progress
 function resume(){
