@@ -1,8 +1,8 @@
 //global vars
 let download_size = false;
-let daemonInterval = null;
 let cache = {};
 let loop = true;
+let countries = [];
 
 //initialize stuff
 //window.setInterval(daemonStatus(), 5000);
@@ -74,7 +74,7 @@ function watchdog(){
                 });
 
                 //calc downloaded and update UI
-                let downloaded = calc_downloaded();
+                let downloaded = update_download_and_worldmap();
                 $(".downloaded_label").html(bytesToSize(downloaded));
                 let percent = (100 * downloaded) / download_size;
                 $("#progress_label").html(percent.toFixed(2) + "%");
@@ -89,14 +89,28 @@ function watchdog(){
     });
 }
 
-//get downloaded part summing peers in cache
-function calc_downloaded(){
+//get downloaded part summing peers in cache and wordmap
+function update_download_and_worldmap(){
     let downloaded = 0;
     Object.keys(cache).forEach(function(key) {
+        //downloaded size
         downloaded += cache[key][2][1];
+        
+        //worldmap
+        if (!(countries.includes(cache[key][1]))){
+            let toadd = {"id": cache[key][1], "showAsSelected": true};
+            map.dataProvider.areas.push(toadd);
+            countries.push(cache[key][1]);
+        }
     });
+
+    $("#countries_label").html(countries.length);
+    map.validateData();
     return downloaded;
 }
+
+//update world map
+
 
 //convert bytes to human readable size
 function bytesToSize(bytes) {
