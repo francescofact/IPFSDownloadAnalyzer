@@ -12,7 +12,7 @@ def index():
 
 @app.route('/api/download/<cid>')
 def start_download(cid):
-    return {"status": ipfsAPI.download_file(cid, "/home/francesco/ipfs/winrar"),
+    return {"status": ipfsAPI.download_file(cid, "/app/downloads/"+cid),
             "size": ipfsAPI.get_file_size(cid)}
 
 @app.route('/api/peers')
