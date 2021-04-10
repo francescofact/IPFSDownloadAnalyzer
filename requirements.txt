@@ -1,5 +1,4 @@
 Flask~=1.1.2
-setuptools~=54.2.0
 requests~=2.25.1
 python-geoip-python3~=1.2
 python-geoip-geolite2

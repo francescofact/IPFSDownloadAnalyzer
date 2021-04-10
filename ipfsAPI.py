@@ -76,7 +76,7 @@ def download_estimation():
 
 def reset_ipfs():
     # shutdown existing
-    command = "killall -9 ipfs"  # brutal but "ipfs shutdown" create problems
+    command = "pkill -f ipfs"  # brutal but "ipfs shutdown" create problems
     process = subprocess.Popen(command.split(), shell=False, stdout=subprocess.PIPE)
     process.wait()
     # spawn existing
