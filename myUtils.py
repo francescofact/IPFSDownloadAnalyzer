@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 import requests
@@ -51,13 +52,13 @@ def rm(cid):
 
 
 def getDownloadedSize(cid):
-    command = "du -s {}{}".format(current_app.config["DOWNLOAD_PATH"], cid)
-    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True)
-    out, err = process.communicate()
-    if out is not None and len(out) > 0:
-        out = out.split("\t")[0]
-        if out.isnumeric():
-            return int(out)*1024
+    folder = current_app.config["DOWNLOAD_PATH"]+cid
+    if os.path.exists(folder):
+        size = 0
+        for (path, dirs, files) in os.walk(folder):
+            for file in files:
+                filename = os.path.join(path, file)
+                size += os.path.getsize(filename)
 
+        return size
     return 0
-

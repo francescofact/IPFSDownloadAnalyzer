@@ -85,7 +85,7 @@ function watchdog(){
                 $(".downloaded_label").html(bytesToSize(downloaded));
                 $(".extradownloaded_label").html(bytesToSize(downloaded - data["downloaded"]));
                 $("#connected").html(data["connected"]);
-                let percent = (100 * downloaded) / download_size;
+                let percent = (100 * data["downloaded"]) / download_size;
                 percent = Math.min(percent, 99.99) // avoid going to 100% until download finished
                 $("#progress_label").html(percent.toFixed(2) + "%");
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);

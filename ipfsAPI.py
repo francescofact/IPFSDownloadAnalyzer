@@ -38,7 +38,7 @@ def get_file_size(cid):
     # in CLI: ipfs object stat <cid>
     stat = myUtils.post("object/stat?arg={}".format(cid))
     if "CumulativeSize" in stat:
-        return int(stat["CumulativeSize"])
+        return int(stat["CumulativeSize"])-int(stat["BlockSize"])-int(stat["LinksSize"])
     else:
         return "Invalid Request"
 
@@ -48,13 +48,22 @@ def is_downloading():
     Check if there is a get running
     :return: dict
     """
+
+    """
+    OLD VERSION, has a problem if download start later
     cmds = myUtils.post("diag/cmds")
     for cmd in cmds:
         if cmd["Active"] and cmd["Command"] == "get":
-            return {"status": "active", "file": cmd["Args"][0]}
+            return "active"
 
-    return {"status": "idle"}
-
+    return "idle"
+    """
+    if "process" in current_app.config:
+        process = current_app.config["process"]
+        status = process.poll()
+        if status is None:
+            return "active"
+    return "idle"
 
 def download_estimation():
     """
@@ -118,5 +127,5 @@ def download_file(cid, output=""):
     current_app.config["cid"] = cid
     command = "ipfs get -o {} {}".format(output, cid)
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-
+    current_app.config["process"] = process
     return "started"

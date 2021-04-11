@@ -28,7 +28,7 @@ def watchdog():
         if ledger != [0, 0]:
             peers_plus[peer[0]] = [peer[1], myUtils.get_ip_nation(peer[1]), ledger]
     downloading = ipfsAPI.is_downloading()
-    return {"connected": len(peers), "peers": peers_plus, "status": downloading["status"], "downloaded": myUtils.getDownloadedSize(app.config["cid"])}
+    return {"connected": len(peers), "peers": peers_plus, "status": downloading, "downloaded": myUtils.getDownloadedSize(app.config["cid"])}
 
 @app.route('/api/status')
 def status():
