@@ -77,11 +77,11 @@ def download_estimation():
 def reset_ipfs():
     # shutdown existing
     command = "pkill -f ipfs"  # brutal but "ipfs shutdown" create problems
-    process = subprocess.Popen(command.split(), shell=False, stdout=subprocess.PIPE)
+    process = subprocess.Popen(command.split(), shell=False, stdout=subprocess.DEVNULL)
     process.wait()
     # spawn existing
     command = "ipfs daemon"
-    process = subprocess.Popen(command.split(), shell=False, stdout=subprocess.PIPE)
+    process = subprocess.Popen(command.split(), shell=False, stdout=subprocess.DEVNULL)
     return
 
 
@@ -111,7 +111,11 @@ def download_file(cid, output=""):
     myUtils.post("repo/gc", json=False)
     print("Cache clear!")
     time.sleep(2)
+    # delete downloaded file
+    myUtils.rm(cid)
+    print("File Deleted!")
     # Start download
+    current_app.config["cid"] = cid
     command = "ipfs get -o {} {}".format(output, cid)
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
 

@@ -1,3 +1,5 @@
+import subprocess
+
 import requests
 from flask import current_app
 from geoip import geolite2
@@ -40,3 +42,22 @@ def get_ip_nation(ip):
         return "WORLD"
     else:
         return info.country
+
+
+def rm(cid):
+    command = "rm -rf {}{}".format(current_app.config["DOWNLOAD_PATH"], cid)
+    process = subprocess.Popen(command.split(), stdout=subprocess.DEVNULL)
+    process.wait()
+
+
+def getDownloadedSize(cid):
+    command = "du -s {}{}".format(current_app.config["DOWNLOAD_PATH"], cid)
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True)
+    out, err = process.communicate()
+    if out is not None and len(out) > 0:
+        out = out.split("\t")[0]
+        if out.isnumeric():
+            return int(out)*1024
+
+    return 0
+

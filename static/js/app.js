@@ -23,7 +23,7 @@ function watchdog(){
     //get peers
     loop = true;
     $.ajax({
-        url: "/api/peers",
+        url: "/api/watchdog",
         success: function(data) {
             if (data["status"] === "idle") {
                 alert("Download Completed!");
@@ -83,6 +83,7 @@ function watchdog(){
                 let downloaded = get_downloaded_and_update_worldmap();
                 //update UI
                 $(".downloaded_label").html(bytesToSize(downloaded));
+                $(".extradownloaded_label").html(bytesToSize(downloaded - data["downloaded"]));
                 $("#connected").html(data["connected"]);
                 let percent = (100 * downloaded) / download_size;
                 percent = Math.min(percent, 99.99) // avoid going to 100% until download finished

@@ -12,10 +12,10 @@ RUN ipfs init
 
 #copy IPFSDownloadAnalyzer files
 RUN mkdir /app
-COPY static /app/static
-COPY templates /app/templates
-COPY *.py /app
-COPY *.txt /app
+COPY static /app/static/
+COPY templates /app/templates/
+COPY *.py /app/
+COPY *.txt /app/
 RUN mkdir /app/downloads
 
 #install requirements
