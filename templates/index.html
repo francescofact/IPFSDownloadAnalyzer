@@ -137,14 +137,15 @@
                     </div>
 
                     <!-- Content Row -->
-
+                    <p align="center"><b id="resumed_label"><br>This download has been resumed. Some stats could be not accurate or working from now</b></p>
                     <div class="row">
                         <div class="col-lg-6 mb-4 d-flex align-items-stretch" >
 
                             <!-- Download Details -->
                             <div class="card shadow mb-4" style="width:100%!important">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Download Details</h6>
+                                    <h6 class="mt-2 font-weight-bold text-primary float-left">Download Details</h6>
+                                    <button id="cancel" class="btn btn-danger float-right">Cancel Download</button><br>
                                 </div>
                                 <div class="card-body">
                                     <p>
@@ -153,8 +154,19 @@
                                         <b>Total Size:</b> <span class="size_label"></span><br>
                                         <b>Downloaded:</b> <span class="downloaded_label">0 bytes</span><br>
                                         <b>Extra Traffic:</b> <span class="extradownloaded_label">0 bytes</span><br><br>
-                                        <button id="cancel" class="btn btn-danger">Cancel Download</button><br>
-                                        <b id="resumed_label"><br>This download has been resumed. Some stats could be not accurate or working from now</b>
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                                <figure class="highcharts-figure">
+                                                    <div id="speeddown" style="height:300px"></div>
+                                                </figure>
+                                            </div>
+                                            <div class="col-6">
+                                                <figure class="highcharts-figure">
+                                                    <div id="speedup" style="height:300px"></div>
+                                                </figure>
+                                            </div>
+                                        </div>
                                     </p>
                                 </div>
                             </div>
@@ -273,6 +285,8 @@
 
     <!-- Page level plugins -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
     <!-- Datatables -->
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>

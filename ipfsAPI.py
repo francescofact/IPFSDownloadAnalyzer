@@ -81,6 +81,11 @@ def download_estimation():
         return -1
 
 
+def get_speed():
+    speeds = myUtils.post("stats/bw")
+    return [speeds["RateIn"], speeds["RateOut"]]
+
+
 # SHELL FUNCTIONS
 
 def reset_ipfs():

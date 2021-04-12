@@ -49,13 +49,14 @@ function watchdog(){
         url: "/api/watchdog",
         success: function(data) {
             if (data["status"] === "idle") {
-                alert("Download Completed!");
                 endTime = new Date();
                 loop = false;
                 $('.progress').fadeOut();
                 progresschart.series[0].color = "#20c997";
                 progresschart.series[0].addPoint(endTime, 100);
                 $("#progress_label").html("Completed");
+                $("#cancel").hide();
+                alert("Download Completed!");
             } else {
                 let peers = data["peers"];
                 //update cache, datatable and pie
@@ -114,11 +115,17 @@ function watchdog(){
                 $('#progressbar').css('width', percent + '%').attr('aria-valuenow', percent);
                 //update percent chart
                 let duration = new Date() - startTime;
-                progresschart.series[0].addPoint([duration,percent]);
+                progresschart.series[0].addPoint([duration,parseFloat(percent.toFixed(2))]);
                 //calc average download speed
                 let speed = ( downloaded / Math.floor(duration / 1000 ) );
                 if (isNaN(speed)) speed=0;
                 $("#speed").html(bytesToSize(speed)+"/s");
+
+                //speed gauge
+                let _up = bytesToSize(data["speed"][1]).split(" ")
+                speedup.series[0].data[0].update({y:data["speed"][1], converted: parseInt(_up[0]), name:_up[1]})
+                let _down = bytesToSize(data["speed"][0]).split(" ")
+                speeddown.series[0].data[0].update({y:data["speed"][0], converted: parseInt(_down[0]), name:_down[1]})
             }
         },
         complete: function() {
@@ -151,7 +158,7 @@ function get_downloaded_and_update_worldmap(){
 //convert bytes to human readable size
 function bytesToSize(bytes) {
    var sizes = ['bytes', 'kb', 'mb', 'gb', 'tb'];
-   if (bytes == 0) return '0 Byte';
+   if (bytes === 0 || bytes == null) return '0 Byte';
    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
 }
