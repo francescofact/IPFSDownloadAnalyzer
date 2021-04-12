@@ -154,24 +154,37 @@
                                         <b>Total Size:</b> <span class="size_label"></span><br>
                                         <b>Downloaded:</b> <span class="downloaded_label">0 bytes</span><br>
                                         <b>Extra Traffic:</b> <span class="extradownloaded_label">0 bytes</span><br><br>
-                                        <div class="row">
-                                            <div class="col-6">
-
-                                                <figure class="highcharts-figure">
-                                                    <div id="speeddown" style="height:300px"></div>
-                                                </figure>
-                                            </div>
-                                            <div class="col-6">
-                                                <figure class="highcharts-figure">
-                                                    <div id="speedup" style="height:300px"></div>
-                                                </figure>
-                                            </div>
-                                        </div>
                                     </p>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Speed Gauge -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Speed</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+
+                                            <figure class="highcharts-figure">
+                                                <div id="speeddown" style="height:300px"></div>
+                                            </figure>
+                                        </div>
+                                        <div class="col-6">
+                                            <figure class="highcharts-figure">
+                                                <div id="speedup" style="height:300px"></div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <!-- Pie Chart -->
                         <div class="col-xl-6 col-lg-6">
                             <div class="card shadow mb-4">
@@ -186,7 +199,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Status Download -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Download Progression</h6>
+                                </div>
+                                <div class="card-body">
+                                    <figure class="highcharts-figure">
+                                        <div id="downloadchart"></div>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="row">
 
                         <!-- Peer Datatable -->
@@ -226,24 +254,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Download Progression</h6>
-                                </div>
-                                <div class="card-body">
-                                    <figure class="highcharts-figure">
-                                        <div id="downloadchart"></div>
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <!-- /.container-fluid -->
 
