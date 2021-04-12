@@ -13,7 +13,6 @@
 </head>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Content Wrapper -->
@@ -153,8 +152,8 @@
                                         <b>CID:</b> <span id="cid_label"></span><br>
                                         <b>Total Size:</b> <span class="size_label"></span><br>
                                         <b>Downloaded:</b> <span class="downloaded_label">0 bytes</span><br>
-                                        <b>Extra Traffic:</b> <span class="extradownloaded_label">0 bytes</span>
-
+                                        <b>Extra Traffic:</b> <span class="extradownloaded_label">0 bytes</span><br>
+                                        <b id="resumed_label"><br><br>This download has been resumed. Some stats could be not accurate or working from now</b>
                                     </p>
                                 </div>
                             </div>
@@ -253,6 +252,16 @@
 
     </div>
     <!-- End of Page Wrapper -->
+
+
+    <div class="loading">
+        <div class="loadingbox text-primary">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <h5>Retriving Daemon Status...</h5>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

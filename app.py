@@ -32,7 +32,12 @@ def watchdog():
 
 @app.route('/api/status')
 def status():
-    return ipfsAPI.is_downloading()
+    downloading = ipfsAPI.is_downloading()
+    if downloading == "active":
+        cid = app.config["cid"]
+        return {"status": downloading, "cid": cid, "size": ipfsAPI.get_file_size(cid)}
+
+    return {"status": downloading}
 
 @app.route('/api/reset')
 def reset():

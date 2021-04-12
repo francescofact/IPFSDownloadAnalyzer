@@ -8,14 +8,34 @@ let startTime = false;
 let endTime = false;
 
 //initialize stuff
-let table = $("#peerstable").DataTable({
-    columnDefs: [
-       { type: 'file-size', targets: 3 }
-     ],
-    "order": [[ 3, "desc" ]],
-    "searching": false,
-    "bLengthChange": false,
+    let table = $("#peerstable").DataTable({
+        columnDefs: [
+           { type: 'file-size', targets: 3 }
+         ],
+        "order": [[ 3, "desc" ]],
+        "searching": false,
+        "bLengthChange": false,
+    });
+$(document).ready(function(){
+    $.ajax({
+        url: "/api/status",
+        success: function (data) {
+            if (data["status"] === "active"){
+                //daemon is downloading
+                    $(".size_label").html(bytesToSize(data["size"]));
+                    startTime = new Date();
+                    download_size = data["size"];
+                    $("#cid_label").html(data["cid"]);
+                    watchdog();
+                    $("#downloadform").hide();
+                    $("#downloadpage").fadeIn();
+                    $("#resumed_label").fadeIn();
+            }
+            $(".loading").fadeOut();
+        }
+    })
 });
+
 
 
 //function to update download status and cache peer help
@@ -171,13 +191,4 @@ function disableDownloadButton(toggle){
         //enable
         $("#download").prop("disabled", false).html("Download");
     }
-}
-
-//resume download in progress
-function resume(){
-    //for debug
-    $("#downloadform").hide();
-    $("#downloadpage").show();
-    $(".size_label").html(bytesToSize(download_size));
-    watchdog();
 }
