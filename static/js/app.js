@@ -41,6 +41,9 @@ $(document).ready(function(){
 //function to update download status and cache peer help
 function watchdog(){
     //get peers
+    if (loop === "cancel")
+        return;
+
     loop = true;
     $.ajax({
         url: "/api/watchdog",
@@ -155,7 +158,7 @@ function bytesToSize(bytes) {
 
 //start download
 $("#download").click(function(){
-    disableDownloadButton(true);
+    disableButton("#download", "Warming up IPFS...", true);
     cache = {};
     let cid = $("#cid").val().trim();
     if (cid === ""){
@@ -173,22 +176,40 @@ $("#download").click(function(){
                     watchdog();
                 } else {
                     alert("Error starting the download. Please restart the application");
-                    disableDownloadButton(false);
+                    disableButton("#download", "Download", false);
                 }
             } else {
                 alert("Error starting the download. Please restart the application");
-                disableDownloadButton(false);
+                disableButton("#download", "Download", false);
             }
         });
     }
 });
 
-function disableDownloadButton(toggle){
+$("#cancel").click(function(){
+    disableButton("#cancel", "Canceling Download", true);
+    loop = "cancel";
+    $.get("/api/download/stop", function(data, status){
+            if (status === "success"){
+                if (data["status"] === "canceled"){
+                    location.reload();
+                } else {
+                    alert("Error canceling the download. Please restart the application");
+                    disableButton("#cancel", "Cancel Download", false);
+                }
+            } else {
+                alert("Error canceling the download. Please restart the application");
+                disableButton("#cancel", "Cancel Download", false);
+            }
+        });
+});
+
+function disableButton(btn, text, toggle){
     if (toggle){
         //disable
-        $("#download").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Warming up IPFS...');
+        $(btn).prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+text);
     } else {
         //enable
-        $("#download").prop("disabled", false).html("Download");
+        $(btn).prop("disabled", false).html(text);
     }
 }

@@ -11,6 +11,12 @@ app.config["DOWNLOAD_PATH"] = "/app/downloads/"
 def index():
     return render_template("index.html")
 
+@app.route('/api/download/stop')
+def stop_download():
+    ipfsAPI.kill_subprocess()
+    myUtils.rm(app.config["cid"])
+    return {"status": "canceled"}
+
 @app.route('/api/download/<cid>')
 def start_download(cid):
     return {"status": ipfsAPI.download_file(cid, app.config["DOWNLOAD_PATH"]+cid),
@@ -21,13 +27,14 @@ def watchdog():
     """
     Respond to frontend update request
     """
+    downloading = ipfsAPI.is_downloading()
     peers = ipfsAPI.get_peers()
     peers_plus = {}
     for peer in peers:
         ledger = ipfsAPI.consult_ledger(peer[0])
         if ledger != [0, 0]:
             peers_plus[peer[0]] = [peer[1], myUtils.get_ip_nation(peer[1]), ledger]
-    downloading = ipfsAPI.is_downloading()
+
     return {"connected": len(peers), "peers": peers_plus, "status": downloading, "downloaded": myUtils.getDownloadedSize(app.config["cid"])}
 
 @app.route('/api/status')
