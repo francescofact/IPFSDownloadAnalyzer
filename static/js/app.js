@@ -158,8 +158,9 @@ function get_downloaded_and_update_worldmap(){
 //convert bytes to human readable size
 function bytesToSize(bytes) {
    var sizes = ['bytes', 'kb', 'mb', 'gb', 'tb'];
-   if (bytes === 0 || bytes == null) return '0 Byte';
+   if (bytes === 0 || bytes == null) return '0 b';
    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+   if (!isFinite(i)) return '0 b'
    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
 }
 
