@@ -25,7 +25,7 @@ then, when the image has been built, just run it with:
 
 **Windows:** `docker run --rm -it -v %cd%/downloads:/app/downloads -p 5000:5000 ipfsdownloadanalyzer`
 
-**Linux/macOS:** `docker run ipfsdownloadanalyzer --rm -it -v $(pwd)/downloads:/app/downloads -p 5000:5000`
+**Linux/macOS:** `docker run --rm -it -v ${PWD}/downloads:/app/downloads -p 5000:5000 ipfsdownloadanalyzer `
 
 >If you want to keep the container after usage, remove `--rm` from the command
 
