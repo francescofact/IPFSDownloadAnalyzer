@@ -101,6 +101,8 @@ function watchdog(){
                         piechart.series[0].addPoint({y: peer[2][1], name: peer[0]})
                     }
                     //cache update
+                    if ( key in cache && cache[key][2][1] > peer[2][1])
+                        console.log(key + " has less download then cache: from " + cache[key][2][1] + " to " + peer[2][1]);
                     cache[key] = peer;
                 });
 
