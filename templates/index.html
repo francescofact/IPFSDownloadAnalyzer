@@ -139,7 +139,7 @@
                     <!-- Content Row -->
                     <p align="center"><b id="resumed_label"><br>This download has been resumed. Some stats could be not accurate or working from now</b></p>
                     <div class="row">
-                        <div class="col-lg-6 mb-4 d-flex align-items-stretch" >
+                        <div class="col-lg-6 mb-4">
 
                             <!-- Download Details -->
                             <div class="card shadow mb-4" style="width:100%!important">
@@ -148,7 +148,7 @@
                                     <button id="cancel" class="btn btn-danger float-right">Cancel Download</button><br>
                                 </div>
                                 <div class="card-body">
-                                    <p>
+                                    <p style="height:281px">
                                         <b>Status:</b> <span id="daemonstatus"></span><br>
                                         <b>CID:</b> <span id="cid_label"></span><br>
                                         <b>Total Size:</b> <span class="size_label"></span><br>
@@ -240,17 +240,28 @@
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Content Column -->
+                        <!-- World Map -->
                         <div class="col-lg-6 mb-4">
-
-                            <!-- Project Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p>The file is almost in <b id="countries_label"></b> countries.</p>
+                                    <p>The file is in almost <b id="countries_label"></b> countries.</p>
                                     <div id="mapdiv" style="width: 100%; height: 450px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Speed Chart -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Download Speed History</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>Speed in bytes</p>
+                                    <div id="speedchart" style="width: 100%; height: 450px;"></div>
                                 </div>
                             </div>
                         </div>

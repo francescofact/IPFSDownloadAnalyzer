@@ -56,6 +56,7 @@ function watchdog(){
                 progresschart.series[0].addPoint(endTime, 100);
                 $("#progress_label").html("Completed");
                 $("#cancel").hide();
+                $("#daemonstatus").html(data["status"]);
                 alert("Download Completed!");
             } else {
                 let peers = data["peers"];
@@ -106,6 +107,7 @@ function watchdog(){
                 //calc downloaded
                 let downloaded = get_downloaded_and_update_worldmap();
                 //update UI
+                $("#daemonstatus").html(data["status"]);
                 $(".downloaded_label").html(bytesToSize(downloaded));
                 $(".extradownloaded_label").html(bytesToSize(downloaded - data["downloaded"]));
                 $("#connected").html(data["connected"]);
@@ -121,11 +123,12 @@ function watchdog(){
                 if (isNaN(speed)) speed=0;
                 $("#speed").html(bytesToSize(speed)+"/s");
 
-                //speed gauge
+                //speed gauge and chart
                 let _up = bytesToSize(data["speed"][1]).split(" ")
-                speedup.series[0].data[0].update({y:data["speed"][1], converted: parseInt(_up[0]), name:_up[1]})
+                speedup.series[0].data[0].update({y:data["speed"][1], converted: _up[0], name:_up[1]+"/s"})
                 let _down = bytesToSize(data["speed"][0]).split(" ")
-                speeddown.series[0].data[0].update({y:data["speed"][0], converted: parseInt(_down[0]), name:_down[1]})
+                speeddown.series[0].data[0].update({y:data["speed"][0], converted: _down[0], name:_down[1]+"/s"})
+                speedchart.series[0].addPoint([duration,data["speed"][0]]);
             }
         },
         complete: function() {

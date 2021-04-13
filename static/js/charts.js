@@ -79,6 +79,55 @@ let progresschart = Highcharts.chart('downloadchart', {
     }]
 });
 
+//download chart
+let speedchart = Highcharts.chart('speedchart', {
+    title: {
+        text:""
+    },
+    credits: {
+        enabled: false
+    },
+    xAxis: {
+        type: 'datetime',
+        labels: {
+            overflow: 'justify'
+        },
+        dateTimeLabelFormats: {
+          minute: '%H:%M:%S',
+          day: '%H:%M:%S',
+        }
+    },
+    yAxis: {
+        labels: {
+            formatter: function () {
+                return bytesToSize(this.value)+"/s";
+            }
+        }
+    },
+    tooltip: {
+        pointFormat: 'The download was at <b>{point.x}</b> after {point.x:%H:%M:%S}'
+    },
+    plotOptions: {
+        area: {
+            marker: {
+                enabled: false,
+                symbol: 'circle',
+                radius: 2,
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
+        }
+    },
+    series: [{
+        showInLegend: false,
+        color: "#F4BC1C",
+        data: []
+    }]
+});
+
 //download pie chart
 let piechart = Highcharts.chart('myPieChart', {
     chart: {
@@ -111,15 +160,10 @@ let speeddown = Highcharts.chart('speeddown', {
         startAngle: -120,
         endAngle: 120,
         background: {
-            backgroundColor:
-                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
             innerRadius: '60%',
             outerRadius: '100%',
             shape: 'arc'
         }
-    },
-    exporting: {
-        enabled: false
     },
     tooltip: {
         enabled: false
@@ -129,10 +173,8 @@ let speeddown = Highcharts.chart('speeddown', {
         min: 0,
         max: 5 * 1024 * 1024,
         stops: [
-            [1, '#60e7a9']
+            [1, '#F4BC1C']
         ],
-        lineWidth: 0,
-        tickWidth: 0,
         minorTickInterval: null,
         tickAmount: 2,
         labels: {
@@ -235,5 +277,14 @@ let speedup = Highcharts.chart('speedup', {
             valueSuffix: ' {point.name}'
         }
     }]
-})
+});
+
+//convert bytes to human readable size
+function bytesToSize(bytes) {
+   var sizes = ['bytes', 'kb', 'mb', 'gb', 'tb'];
+   if (bytes === 0 || bytes == null) return '0 b';
+   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+   if (!isFinite(i)) return '0 b'
+   return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+}
 
