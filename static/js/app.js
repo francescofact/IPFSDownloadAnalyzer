@@ -68,7 +68,7 @@ function watchdog(){
                     if (key in cache) {
                         //cache update
                         if (cache[key][2][1] > peer[2][1]) //ledger has resetted stats (idk why)
-                            second_cache[key] = cache[key][2][1];
+                            second_cache[key] = getPeerDownload(key);
                         cache[key] = peer;
 
                         //already in table, updating it
@@ -235,6 +235,6 @@ function disableButton(btn, text, toggle){
 
 function getPeerDownload(key){
     if (key in second_cache)
-        return cache[key][2][1] + second_cache[key]
-    return cache[key][2][1]
+        return cache[key][2][1] + second_cache[key];
+    return cache[key][2][1];
 }
