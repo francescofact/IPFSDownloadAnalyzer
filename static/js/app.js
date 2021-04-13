@@ -1,6 +1,7 @@
 //global vars
 let download_size = false;
 let cache = {};
+let second_cache = {};
 let loop = true;
 let countries = [];
 
@@ -65,13 +66,19 @@ function watchdog(){
                     let peer = peers[key]
                     //datatables and pie update
                     if (key in cache) {
+                        //cache update
+                        if (cache[key][2][1] > peer[2][1]) //ledger has resetted stats (idk why)
+                            second_cache[key] = cache[key][2][1];
+                        cache[key] = peer;
+
                         //already in table, updating it
+                        let dwn = getPeerDownload(key);
                         let skip = false;
                         table.rows().every(function (index) {
                             if (!skip) {
                                 let row = this.data();
                                 if (row[1] === key) {
-                                    row[3] = bytesToSize(peer[2][1]);
+                                    row[3] = bytesToSize(dwn);
                                     table.row(index).data(row).draw(false);
                                     skip = true;
                                 }
@@ -81,36 +88,35 @@ function watchdog(){
                         //slice
                         for (let index in piechart.series[0].data){
                             if (piechart.series[0].data[index].name === peer[0]) {
-                                piechart.series[0].data[index].update({y: peer[2][1]})
+                                piechart.series[0].data[index].update({y: dwn})
                                 break;
                             }
                         }
                     } else {
+                        //insert in cache
+                        cache[key] = peer;
                         //not in table, creating row
+                        let dwn = getPeerDownload(key);
                         let newrow = [
                             "<img src='https://www.countryflags.io/" + peer[1] + "/flat/24.png'/>",
                             key, //Peer ID
                             peer[0],  //Peer IP
-                            bytesToSize(peer[2][1]) //Downloaded from Peer
+                            bytesToSize(dwn) //Downloaded from Peer
                         ]
                         if (peer[1] === "WORLD") //remove flag img if unknown
                             newrow[0] = "";
                         table.row.add(newrow).draw(false);
 
                         //creating slice
-                        piechart.series[0].addPoint({y: peer[2][1], name: peer[0]})
+                        piechart.series[0].addPoint({y: dwn, name: peer[0]})
                     }
-                    //cache update
-                    if ( key in cache && cache[key][2][1] > peer[2][1])
-                        console.log(key + " has less download then cache: from " + cache[key][2][1] + " to " + peer[2][1]);
-                    cache[key] = peer;
                 });
 
                 //calc downloaded
                 let downloaded = get_downloaded_and_update_worldmap();
                 //update UI
                 $("#daemonstatus").html(data["status"]);
-                $(".downloaded_label").html(bytesToSize(downloaded));
+                $(".downloaded_label").html(bytesToSize(data["downloaded"]));
                 $(".extradownloaded_label").html(bytesToSize(downloaded - data["downloaded"]));
                 $("#connected").html(data["connected"]);
                 let percent = (100 * data["downloaded"]) / download_size;
@@ -145,7 +151,7 @@ function get_downloaded_and_update_worldmap(){
     let downloaded = 0;
     Object.keys(cache).forEach(function(key) {
         //downloaded size
-        downloaded += cache[key][2][1];
+        downloaded += getPeerDownload(key);
         
         //worldmap
         if (!(countries.includes(cache[key][1]))){
@@ -225,4 +231,10 @@ function disableButton(btn, text, toggle){
         //enable
         $(btn).prop("disabled", false).html(text);
     }
+}
+
+function getPeerDownload(key){
+    if (key in second_cache)
+        return cache[key][2][1] + second_cache[key]
+    return cache[key][2][1]
 }

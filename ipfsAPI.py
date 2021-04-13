@@ -48,16 +48,6 @@ def is_downloading():
     Check if there is a get running
     :return: dict
     """
-
-    """
-    OLD VERSION, has a problem if download start later
-    cmds = myUtils.post("diag/cmds")
-    for cmd in cmds:
-        if cmd["Active"] and cmd["Command"] == "get":
-            return "active"
-
-    return "idle"
-    """
     if "process" in current_app.config:
         process = current_app.config["process"]
         status = process.poll()
