@@ -11,6 +11,11 @@ app.config["DOWNLOAD_PATH"] = "/app/downloads/"
 def index():
     return render_template("index.html")
 
+@app.route('/api/download/clear')
+def stop_download():
+    myUtils.rm("*")
+    return {"status": "cleared"}
+
 @app.route('/api/download/stop')
 def stop_download():
     ipfsAPI.kill_subprocess()

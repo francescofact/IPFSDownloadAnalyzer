@@ -209,18 +209,36 @@ $("#cancel").click(function(){
     disableButton("#cancel", "Canceling Download", true);
     loop = "cancel";
     $.get("/api/download/stop", function(data, status){
-            if (status === "success"){
-                if (data["status"] === "canceled"){
-                    location.reload();
-                } else {
-                    alert("Error canceling the download. Please restart the application");
-                    disableButton("#cancel", "Cancel Download", false);
-                }
+        if (status === "success"){
+            if (data["status"] === "canceled"){
+                location.reload();
             } else {
                 alert("Error canceling the download. Please restart the application");
                 disableButton("#cancel", "Cancel Download", false);
             }
-        });
+        } else {
+            alert("Error canceling the download. Please restart the application");
+            disableButton("#cancel", "Cancel Download", false);
+        }
+    });
+});
+
+$("#clear").click(function(){
+    disableButton("#clear", "Clearing Download Folder", true);
+    $.get("/api/download/clear", function(data, status){
+        if (status === "success"){
+            if (data["status"] === "cleared"){
+                alert("Download Folder Cleaned!");
+                location.reload();
+            } else {
+                alert("Error clearing the download folder. Please restart the application");
+                disableButton("#clear", "Clear Download Folder", false);
+            }
+        } else {
+            alert("Error clearing the download folder. Please restart the application");
+            disableButton("#clear", "Clear Download Folder", false);
+        }
+    });
 });
 
 function disableButton(btn, text, toggle){
