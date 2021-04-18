@@ -17,7 +17,7 @@ During the download IPFSDownloadAnalyzer can monitor:
 - Current connected peers
 
 ## How Build and Run with Docker
-Clone the repository and run in the root folder the following commands:
+Clone the repository, create a "downloads" folder and run in the root folder the following commands:
 
 `docker build -t ipfsdownloadanalyzer .`
 
