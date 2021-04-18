@@ -47,7 +47,10 @@ def get_ip_nation(ip):
 
 def rm(cid):
     command = "rm -rf {}{}".format(current_app.config["DOWNLOAD_PATH"], cid)
-    process = subprocess.Popen(command.split(), stdout=subprocess.DEVNULL)
+    if cid == "*":
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
+    else:
+        process = subprocess.Popen(command.split(), stdout=subprocess.DEVNULL)
     process.wait()
 
 
