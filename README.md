@@ -23,9 +23,9 @@ Clone the repository and run in the root folder the following commands:
 
 then, when the image has been built, just run it with:
 
-**Windows:** `docker run --rm -it -v %cd%/downloads:/app/downloads -p 5000:5000 ipfsdownloadanalyzer`
+**Windows:** `docker run --rm -it -v "%cd%/downloads":/app/downloads -p 5000:5000 ipfsdownloadanalyzer`
 
-**Linux/macOS:** `docker run --rm -it -v ${PWD}/downloads:/app/downloads -p 5000:5000 ipfsdownloadanalyzer `
+**Linux/macOS:** `docker run --rm -it -v "${PWD}/downloads":/app/downloads -p 5000:5000 ipfsdownloadanalyzer `
 
 >If you want to keep the container after usage, remove `--rm` from the command
 

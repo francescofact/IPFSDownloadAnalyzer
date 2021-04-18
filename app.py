@@ -12,7 +12,7 @@ def index():
     return render_template("index.html")
 
 @app.route('/api/download/clear')
-def stop_download():
+def clear_download():
     myUtils.rm("*")
     return {"status": "cleared"}
 
